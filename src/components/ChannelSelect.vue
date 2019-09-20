@@ -27,6 +27,17 @@
         },
         created() {
             console.log(this.channel);
+        },
+        watch: {
+            channel: {
+                handler(newValue, oldValue) {
+                    console.log(1);
+                    //父组件param对象改变会触发此函数
+                    console.log('77777777777777777',oldValue);
+                    console.log('77777777777777777',newValue);
+                },
+                deep: true,
+            }
         }
     }
 </script>

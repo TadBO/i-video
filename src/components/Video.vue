@@ -72,6 +72,7 @@
                 list.forEach((item) => {
                     newList.push(item.name);
                 });
+                this.freeUrl = newList;
                 this.res = data;
             });
         }

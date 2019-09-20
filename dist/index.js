@@ -4016,6 +4016,7 @@ exports.default = {
             list.forEach(function (item) {
                 newList.push(item.name);
             });
+            _this.freeUrl = newList;
             _this.res = data;
         });
     }
@@ -4957,6 +4958,19 @@ exports.default = {
     },
     created: function created() {
         console.log(this.channel);
+    },
+
+    watch: {
+        channel: {
+            handler: function handler(newValue, oldValue) {
+                console.log(1);
+                //父组件param对象改变会触发此函数
+                console.log('77777777777777777', oldValue);
+                console.log('77777777777777777', newValue);
+            },
+
+            deep: true
+        }
     }
 };
 
@@ -5072,8 +5086,18 @@ exports.default = {
             });
         }
     },
-    beforeMount: function beforeMount() {
-        console.log('sl==============================', this.sourceList);
+    watch: {
+        sourceList: {
+            handler: function handler(newValue, oldValue) {
+                console.log(1);
+                //父组件param对象改变会触发此函数
+                console.log('77777777777777777', oldValue);
+                console.log('77777777777777777', newValue);
+                this.sourceList = newValue;
+            },
+
+            deep: true
+        }
     }
 };
 
