@@ -4939,7 +4939,9 @@ exports.default = {
         channel: Array
     },
     data: function data() {
-        return {};
+        return {
+            channelList: []
+        };
     },
 
     methods: {
@@ -4947,7 +4949,7 @@ exports.default = {
             var _this = this;
 
             picker.pick({
-                items: this.channel,
+                items: this.channelList,
                 index: 0
             }, function (event) {
                 if (event.result === 'success') {
@@ -4963,10 +4965,7 @@ exports.default = {
     watch: {
         channel: {
             handler: function handler(newValue, oldValue) {
-                console.log(1);
-                //父组件param对象改变会触发此函数
-                console.log('77777777777777777', oldValue);
-                console.log('77777777777777777', newValue);
+                this.channelList = newValue;
             },
 
             deep: true
@@ -5069,6 +5068,12 @@ Object.defineProperty(exports, "__esModule", {
 var picker = weex.requireModule('picker');
 exports.default = {
     name: "SourceSelect",
+    data: function data() {
+        return {
+            sourceL: []
+        };
+    },
+
     props: {
         sourceList: Array
     },
@@ -5077,7 +5082,7 @@ exports.default = {
             var _this = this;
 
             picker.pick({
-                items: this.sourceList,
+                items: this.sourceL,
                 index: 0
             }, function (event) {
                 if (event.result === 'success') {
@@ -5089,11 +5094,7 @@ exports.default = {
     watch: {
         sourceList: {
             handler: function handler(newValue, oldValue) {
-                console.log(1);
-                //父组件param对象改变会触发此函数
-                console.log('77777777777777777', oldValue);
-                console.log('77777777777777777', newValue);
-                this.sourceList = newValue;
+                this.sourceL = newValue;
             },
 
             deep: true
