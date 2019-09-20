@@ -1,9 +1,10 @@
 <template>
     <div style="width: 100%">
         <div>
-            <text class="button" @click="pick">选择播放源</text>
             <text class="button" @click="handleClick">测试点击切换</text>
-            <XPicker>点击</XPicker>
+            <channel-select :channel="channel"></channel-select>
+            <source-select :source-list="freeUrl"></source-select>
+            <text class="button" @click="handleBackClick" v-if="preUrl.length > 0">返回</text>
         </div>
         <web ref="webview" style="width: 100%; height: calc(100vh - 60px)" :src="url" @pagestart="handlePageStart"
              @error="handleError"></web>
@@ -12,32 +13,25 @@
 
 <script>
     import { source } from "../utils/fetch";
-    import { XPicker } from 'weex-x-picker';
+    import ChannelSelect from './ChannelSelect';
+    import SourceSelect from './SourceSelect';
     const webview = weex.requireModule('webview');
-    const picker = weex.requireModule('picker')
     export default {
         name: "Video",
-        components: {XPicker},
+        components: {
+            ChannelSelect,
+            SourceSelect
+        },
         data() {
             return {
                 channel: [],
                 url: 'https://m.v.qq.com/',
                 freeUrl: [],
-                selectedUrl: 'http://www.82190555.com/index/qqvod.php?url=',
-                value: '',
+                selectedUrl: '',
+                preUrl: [],
             };
         },
         methods: {
-            pick() {
-                picker.pick({
-                    items: this.channel,
-                    index: 0,
-                }, event => {
-                    if (event.result === 'success') {
-                        this.value = event.data
-                    }
-                })
-            },
             handleClick() {
                 console.log(webview);
                 this.url = `${this.selectedUrl}${this.url}`;
@@ -51,18 +45,24 @@
             },
             handleError(e) {
                 console.log('error=============================', e);
+            },
+            handleBackClick() {
+
             }
         },
         created() {
             source.getAllList().then(({data}) => {
-                console.log(data);
                 const { platformlist, list } = data;
                 const newPlatformList = [];
                 platformlist.forEach((item) => {
                     newPlatformList.push(item.name);
                 });
                 this.channel = newPlatformList;
-            })
+                const newList = [];
+                list.forEach((item) => {
+                    newList.push(item.name);
+                });
+            });
         }
     }
 </script>
