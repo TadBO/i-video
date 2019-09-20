@@ -922,7 +922,7 @@ module.exports = Cancel;
 var _require = __webpack_require__(10),
     router = _require.router;
 
-var App = __webpack_require__(38);
+var App = __webpack_require__(42);
 /* eslint-disable no-new */
 new Vue(Vue.util.extend({ el: '#root', router: router }, App));
 router.push('/');
@@ -3865,7 +3865,7 @@ __vue_styles__.push(__webpack_require__(13)
 __vue_exports__ = __webpack_require__(14)
 
 /* template */
-var __vue_template__ = __webpack_require__(37)
+var __vue_template__ = __webpack_require__(41)
 __vue_options__ = __vue_exports__ = __vue_exports__ || {}
 if (
   typeof __vue_exports__.default === "object" ||
@@ -3926,18 +3926,17 @@ Object.defineProperty(exports, "__esModule", {
 
 var _fetch = __webpack_require__(15);
 
-var _ChannelSelect = __webpack_require__(42);
+var _ChannelSelect = __webpack_require__(33);
 
 var _ChannelSelect2 = _interopRequireDefault(_ChannelSelect);
 
-var _SourceSelect = __webpack_require__(46);
+var _SourceSelect = __webpack_require__(37);
 
 var _SourceSelect2 = _interopRequireDefault(_SourceSelect);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var webview = weex.requireModule('webview'); //
-//
 //
 //
 //
@@ -3962,27 +3961,43 @@ exports.default = {
             url: 'https://m.v.qq.com/',
             freeUrl: [],
             selectedUrl: '',
-            preUrl: []
+            res: null,
+            webUrl: 'https://m.v.qq.com/'
         };
     },
 
     methods: {
-        handleClick: function handleClick() {
-            console.log(webview);
-            this.url = '' + this.selectedUrl + this.url;
-            webview.reload(this.$refs.webview);
-            console.log('newUrl=======================', this.url);
-        },
         handlePageStart: function handlePageStart(e) {
-            var url = e.url;
-
-            console.log('url=============================', url);
-            this.url = url;
+            console.log(e);
         },
         handleError: function handleError(e) {
             console.log('error=============================', e);
         },
-        handleBackClick: function handleBackClick() {}
+        handleBackClick: function handleBackClick() {
+            webview.goBack(this.$refs.webview);
+        },
+
+        // 改变视频源加载不同的视频源
+        handleChannelChange: function handleChannelChange(index) {
+            var platformlist = this.res.platformlist;
+
+            var newData = platformlist[index];
+            this.url = newData.url;
+            // 更改源时候重置选中的源url
+            this.selectedUrl = '';
+            this.webUrl = '' + this.selectedUrl + this.url;
+            webview.reload(this.$refs.webview);
+        },
+
+        // 改变解码地址进行破解并显示视频
+        handleSourceChange: function handleSourceChange(index) {
+            var list = this.res.list;
+
+            var newData = list[index];
+            this.selectedUrl = newData.url;
+            this.webUrl = '' + this.selectedUrl + this.url;
+            webview.reload(this.$refs.webview);
+        }
     },
     created: function created() {
         var _this = this;
@@ -4001,6 +4016,7 @@ exports.default = {
             list.forEach(function (item) {
                 newList.push(item.name);
             });
+            _this.res = data;
         });
     }
 };
@@ -4838,69 +4854,21 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 33 */,
-/* 34 */,
-/* 35 */,
-/* 36 */,
-/* 37 */
-/***/ (function(module, exports) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticStyle: {
-      width: "100%"
-    }
-  }, [_c('div', [_c('text', {
-    staticClass: ["button"],
-    on: {
-      "click": _vm.handleClick
-    }
-  }, [_vm._v("测试点击切换")]), _c('channel-select', {
-    attrs: {
-      "channel": _vm.channel
-    }
-  }), _c('source-select', {
-    attrs: {
-      "sourceList": _vm.freeUrl
-    }
-  }), (_vm.preUrl.length > 0) ? _c('text', {
-    staticClass: ["button"],
-    on: {
-      "click": _vm.handleBackClick
-    }
-  }, [_vm._v("返回")]) : _vm._e()], 1), _c('web', {
-    ref: "webview",
-    staticStyle: {
-      width: "100%",
-      height: "calc(100vh - 60px)"
-    },
-    attrs: {
-      "src": _vm.url
-    },
-    on: {
-      "pagestart": _vm.handlePageStart,
-      "error": _vm.handleError
-    }
-  })])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-
-/***/ }),
-/* 38 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __vue_exports__, __vue_options__
 var __vue_styles__ = []
 
 /* styles */
-__vue_styles__.push(__webpack_require__(39)
+__vue_styles__.push(__webpack_require__(34)
 )
 
 /* script */
-__vue_exports__ = __webpack_require__(40)
+__vue_exports__ = __webpack_require__(35)
 
 /* template */
-var __vue_template__ = __webpack_require__(41)
+var __vue_template__ = __webpack_require__(36)
 __vue_options__ = __vue_exports__ = __vue_exports__ || {}
 if (
   typeof __vue_exports__.default === "object" ||
@@ -4912,10 +4880,10 @@ __vue_options__ = __vue_exports__ = __vue_exports__.default
 if (typeof __vue_options__ === "function") {
   __vue_options__ = __vue_options__.options
 }
-__vue_options__.__file = "F:\\tuber\\ivideo\\i-video\\src\\index.vue"
+__vue_options__.__file = "F:\\tuber\\ivideo\\i-video\\src\\components\\ChannelSelect.vue"
 __vue_options__.render = __vue_template__.render
 __vue_options__.staticRenderFns = __vue_template__.staticRenderFns
-__vue_options__._scopeId = "data-v-1a4d8e3c"
+__vue_options__._scopeId = "data-v-6d4d1302"
 __vue_options__.style = __vue_options__.style || {}
 __vue_styles__.forEach(function (module) {
   for (var name in module) {
@@ -4930,61 +4898,198 @@ module.exports = __vue_exports__
 
 
 /***/ }),
-/* 39 */
+/* 34 */
 /***/ (function(module, exports) {
 
 module.exports = {
-  "wrapper": {
-    "justifyContent": "center",
-    "alignItems": "center"
-  },
-  "logo": {
-    "width": "424",
-    "height": "200"
-  },
-  "greeting": {
+  "button": {
+    "fontSize": "36",
+    "width": 100,
+    "color": "#41B883",
     "textAlign": "center",
-    "marginTop": "70",
-    "fontSize": "50",
-    "color": "#41B883"
-  },
-  "message": {
-    "marginTop": "30",
-    "marginRight": "30",
-    "marginBottom": "30",
-    "marginLeft": "30",
-    "fontSize": "32",
-    "color": "#727272"
+    "paddingTop": "25",
+    "paddingBottom": "25",
+    "borderWidth": "1",
+    "borderStyle": "solid",
+    "borderColor": "rgb(162,217,192)",
+    "backgroundColor": "rgba(162,217,192,0.2)"
   }
 }
 
 /***/ }),
-/* 40 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 //
 //
 //
 //
+
+var picker = weex.requireModule('picker');
+exports.default = {
+    name: "ChannelSelect",
+    props: {
+        channel: Array
+    },
+    data: function data() {
+        return {};
+    },
+
+    methods: {
+        handlePick: function handlePick() {
+            var _this = this;
+
+            picker.pick({
+                items: this.channel,
+                index: 0
+            }, function (event) {
+                if (event.result === 'success') {
+                    _this.$emit('channelSelect', event.data);
+                }
+            });
+        }
+    },
+    created: function created() {
+        console.log(this.channel);
+    }
+};
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('text', {
+    staticClass: ["button"],
+    on: {
+      "click": _vm.handlePick
+    }
+  }, [_vm._v("选择播放源")])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __vue_exports__, __vue_options__
+var __vue_styles__ = []
+
+/* styles */
+__vue_styles__.push(__webpack_require__(38)
+)
+
+/* script */
+__vue_exports__ = __webpack_require__(39)
+
+/* template */
+var __vue_template__ = __webpack_require__(40)
+__vue_options__ = __vue_exports__ = __vue_exports__ || {}
+if (
+  typeof __vue_exports__.default === "object" ||
+  typeof __vue_exports__.default === "function"
+) {
+if (Object.keys(__vue_exports__).some(function (key) { return key !== "default" && key !== "__esModule" })) {console.error("named exports are not supported in *.vue files.")}
+__vue_options__ = __vue_exports__ = __vue_exports__.default
+}
+if (typeof __vue_options__ === "function") {
+  __vue_options__ = __vue_options__.options
+}
+__vue_options__.__file = "F:\\tuber\\ivideo\\i-video\\src\\components\\SourceSelect.vue"
+__vue_options__.render = __vue_template__.render
+__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
+__vue_options__._scopeId = "data-v-61b55b87"
+__vue_options__.style = __vue_options__.style || {}
+__vue_styles__.forEach(function (module) {
+  for (var name in module) {
+    __vue_options__.style[name] = module[name]
+  }
+})
+if (typeof __register_static_styles__ === "function") {
+  __register_static_styles__(__vue_options__._scopeId, __vue_styles__)
+}
+
+module.exports = __vue_exports__
+
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  "button": {
+    "fontSize": "36",
+    "width": 100,
+    "color": "#41B883",
+    "textAlign": "center",
+    "paddingTop": "25",
+    "paddingBottom": "25",
+    "borderWidth": "1",
+    "borderStyle": "solid",
+    "borderColor": "rgb(162,217,192)",
+    "backgroundColor": "rgba(162,217,192,0.2)"
+  }
+}
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 //
 //
 //
 //
 
+var picker = weex.requireModule('picker');
 exports.default = {
-  name: 'App',
-  data: function data() {
-    return {
-      logo: 'https://gw.alicdn.com/tfs/TB1yopEdgoQMeJjy1XaXXcSsFXa-640-302.png'
-    };
-  }
+    name: "SourceSelect",
+    props: {
+        sourceList: Array
+    },
+    methods: {
+        pick: function pick() {
+            var _this = this;
+
+            picker.pick({
+                items: this.sourceList,
+                index: 0
+            }, function (event) {
+                if (event.result === 'success') {
+                    _this.$emit('sourceChange', event.data);
+                }
+            });
+        }
+    },
+    beforeMount: function beforeMount() {
+        console.log('sl==============================', this.sourceList);
+    }
 };
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('text', {
+    staticClass: ["button"],
+    on: {
+      "click": _vm.pick
+    }
+  }, [_vm._v("切换视频源")])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
 
 /***/ }),
 /* 41 */
@@ -4992,8 +5097,43 @@ exports.default = {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: ["wrapper"]
-  }, [_c('router-view')], 1)
+    staticStyle: {
+      width: "100%"
+    }
+  }, [_c('div', [_c('channel-select', {
+    attrs: {
+      "channel": _vm.channel
+    },
+    on: {
+      "channelSelect": _vm.handleChannelChange
+    }
+  }), _c('source-select', {
+    attrs: {
+      "sourceList": _vm.freeUrl
+    },
+    on: {
+      "sourceChange": _vm.handleSourceChange
+    }
+  }), (_vm.webUrl.indexOf('?url=') != -1) ? _c('text', {
+    staticClass: ["button"],
+    on: {
+      "click": _vm.handleBackClick
+    }
+  }, [_vm._v("返回")]) : _vm._e()], 1), _c('web', {
+    ref: "webview",
+    staticStyle: {
+      width: "100%",
+      height: "calc(100vh - 60px)"
+    },
+    attrs: {
+      "canGoBack": "true",
+      "src": _vm.webUrl
+    },
+    on: {
+      "pagestart": _vm.handlePageStart,
+      "error": _vm.handleError
+    }
+  })])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 
@@ -5024,10 +5164,10 @@ __vue_options__ = __vue_exports__ = __vue_exports__.default
 if (typeof __vue_options__ === "function") {
   __vue_options__ = __vue_options__.options
 }
-__vue_options__.__file = "F:\\tuber\\ivideo\\i-video\\src\\components\\ChannelSelect.vue"
+__vue_options__.__file = "F:\\tuber\\ivideo\\i-video\\src\\index.vue"
 __vue_options__.render = __vue_template__.render
 __vue_options__.staticRenderFns = __vue_template__.staticRenderFns
-__vue_options__._scopeId = "data-v-6d4d1302"
+__vue_options__._scopeId = "data-v-1a4d8e3c"
 __vue_options__.style = __vue_options__.style || {}
 __vue_styles__.forEach(function (module) {
   for (var name in module) {
@@ -5045,7 +5185,30 @@ module.exports = __vue_exports__
 /* 43 */
 /***/ (function(module, exports) {
 
-module.exports = {}
+module.exports = {
+  "wrapper": {
+    "justifyContent": "center",
+    "alignItems": "center"
+  },
+  "logo": {
+    "width": "424",
+    "height": "200"
+  },
+  "greeting": {
+    "textAlign": "center",
+    "marginTop": "70",
+    "fontSize": "50",
+    "color": "#41B883"
+  },
+  "message": {
+    "marginTop": "30",
+    "marginRight": "30",
+    "marginBottom": "30",
+    "marginLeft": "30",
+    "fontSize": "32",
+    "color": "#727272"
+  }
+}
 
 /***/ }),
 /* 44 */
@@ -5055,36 +5218,24 @@ module.exports = {}
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 //
 //
 //
 //
+//
+//
+//
+//
 
-var picker = weex.requireModule('picker');
 exports.default = {
-    name: "ChannelSelect",
-    props: {
-        channel: Array
-    },
-    data: function data() {
-        return {};
-    },
-
-    methods: {
-        handlePick: function handlePick() {
-            picker.pick({
-                items: this.channel,
-                index: 0
-            }, function (event) {
-                if (event.result === 'success') {}
-            });
-        }
-    },
-    created: function created() {
-        console.log(this.channel);
-    }
+  name: 'App',
+  data: function data() {
+    return {
+      logo: 'https://gw.alicdn.com/tfs/TB1yopEdgoQMeJjy1XaXXcSsFXa-640-302.png'
+    };
+  }
 };
 
 /***/ }),
@@ -5092,113 +5243,9 @@ exports.default = {
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('text', {
-    staticClass: ["button"],
-    on: {
-      "click": _vm.handlePick
-    }
-  }, [_vm._v("选择播放源")])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-
-/***/ }),
-/* 46 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __vue_exports__, __vue_options__
-var __vue_styles__ = []
-
-/* styles */
-__vue_styles__.push(__webpack_require__(47)
-)
-
-/* script */
-__vue_exports__ = __webpack_require__(48)
-
-/* template */
-var __vue_template__ = __webpack_require__(49)
-__vue_options__ = __vue_exports__ = __vue_exports__ || {}
-if (
-  typeof __vue_exports__.default === "object" ||
-  typeof __vue_exports__.default === "function"
-) {
-if (Object.keys(__vue_exports__).some(function (key) { return key !== "default" && key !== "__esModule" })) {console.error("named exports are not supported in *.vue files.")}
-__vue_options__ = __vue_exports__ = __vue_exports__.default
-}
-if (typeof __vue_options__ === "function") {
-  __vue_options__ = __vue_options__.options
-}
-__vue_options__.__file = "F:\\tuber\\ivideo\\i-video\\src\\components\\SourceSelect.vue"
-__vue_options__.render = __vue_template__.render
-__vue_options__.staticRenderFns = __vue_template__.staticRenderFns
-__vue_options__._scopeId = "data-v-61b55b87"
-__vue_options__.style = __vue_options__.style || {}
-__vue_styles__.forEach(function (module) {
-  for (var name in module) {
-    __vue_options__.style[name] = module[name]
-  }
-})
-if (typeof __register_static_styles__ === "function") {
-  __register_static_styles__(__vue_options__._scopeId, __vue_styles__)
-}
-
-module.exports = __vue_exports__
-
-
-/***/ }),
-/* 47 */
-/***/ (function(module, exports) {
-
-module.exports = {}
-
-/***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-//
-//
-//
-//
-
-var picker = weex.requireModule('picker');
-exports.default = {
-    name: "SourceSelect",
-    props: {
-        sourceList: Array
-    },
-    methods: {
-        pick: function pick() {
-            var _this = this;
-
-            picker.pick({
-                items: this.sourceList,
-                index: 0
-            }, function (event) {
-                if (event.result === 'success') {
-                    _this.value = event.data;
-                }
-            });
-        }
-    }
-};
-
-/***/ }),
-/* 49 */
-/***/ (function(module, exports) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('text', {
-    staticClass: ["button"],
-    on: {
-      "click": _vm.pick
-    }
-  }, [_vm._v("切换视频源")])
+  return _c('div', {
+    staticClass: ["wrapper"]
+  }, [_c('router-view')], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 

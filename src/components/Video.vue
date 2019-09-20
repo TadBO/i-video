@@ -1,12 +1,11 @@
 <template>
     <div style="width: 100%">
         <div>
-            <text class="button" @click="handleClick">测试点击切换</text>
-            <channel-select :channel="channel"></channel-select>
-            <source-select :source-list="freeUrl"></source-select>
-            <text class="button" @click="handleBackClick" v-if="preUrl.length > 0">返回</text>
+            <channel-select @channelSelect="handleChannelChange" :channel="channel"></channel-select>
+            <source-select @sourceChange="handleSourceChange" :source-list="freeUrl"></source-select>
+            <text class="button" @click="handleBackClick" v-if="webUrl.indexOf('?url=') != -1">返回</text>
         </div>
-        <web ref="webview" style="width: 100%; height: calc(100vh - 60px)" :src="url" @pagestart="handlePageStart"
+        <web canGoBack="true" ref="webview" style="width: 100%; height: calc(100vh - 60px)" :src="webUrl" @pagestart="handlePageStart"
              @error="handleError"></web>
     </div>
 </template>
@@ -28,27 +27,38 @@
                 url: 'https://m.v.qq.com/',
                 freeUrl: [],
                 selectedUrl: '',
-                preUrl: [],
+                res: null,
+                webUrl: 'https://m.v.qq.com/',
             };
         },
         methods: {
-            handleClick() {
-                console.log(webview);
-                this.url = `${this.selectedUrl}${this.url}`;
-                webview.reload(this.$refs.webview);
-                console.log('newUrl=======================', this.url);
-            },
             handlePageStart(e) {
-                const {url} = e;
-                console.log('url=============================', url);
-                this.url = url;
+                console.log(e);
             },
             handleError(e) {
                 console.log('error=============================', e);
             },
             handleBackClick() {
-
-            }
+                webview.goBack(this.$refs.webview);
+            },
+            // 改变视频源加载不同的视频源
+            handleChannelChange(index) {
+                const { platformlist } = this.res;
+                const newData = platformlist[index];
+                this.url = newData.url;
+                // 更改源时候重置选中的源url
+                this.selectedUrl = '';
+                this.webUrl = `${this.selectedUrl}${this.url}`;
+                webview.reload(this.$refs.webview);
+            },
+            // 改变解码地址进行破解并显示视频
+            handleSourceChange(index) {
+                const { list } = this.res;
+                const newData = list[index];
+                this.selectedUrl = newData.url;
+                this.webUrl = `${this.selectedUrl}${this.url}`;
+                webview.reload(this.$refs.webview);
+            },
         },
         created() {
             source.getAllList().then(({data}) => {
@@ -62,6 +72,7 @@
                 list.forEach((item) => {
                     newList.push(item.name);
                 });
+                this.res = data;
             });
         }
     }
