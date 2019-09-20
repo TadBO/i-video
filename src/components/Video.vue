@@ -1,31 +1,37 @@
 <template>
-   <div style="width: 100%">
-       <div>
-           <text class="button" @click="pick">Pick</text>
-           <text class="button" @click="handleClick">测试点击切换</text>
-       </div>
-       <web ref="webview" style="width: 100%; height: calc(100vh - 60px)" :src="url" @pagestart="handlePageStart" @error="handleError"></web>
-   </div>
+    <div style="width: 100%">
+        <div>
+            <text class="button" @click="pick">选择播放源</text>
+            <text class="button" @click="handleClick">测试点击切换</text>
+            <XPicker>点击</XPicker>
+        </div>
+        <web ref="webview" style="width: 100%; height: calc(100vh - 60px)" :src="url" @pagestart="handlePageStart"
+             @error="handleError"></web>
+    </div>
 </template>
 
 <script>
+    import { source } from "../utils/fetch";
+    import { XPicker } from 'weex-x-picker';
     const webview = weex.requireModule('webview');
     const picker = weex.requireModule('picker')
     export default {
         name: "Video",
+        components: {XPicker},
         data() {
             return {
                 channel: [],
-                url: ' https://m.v.qq.com/cover/9/96sxjj429lictza.html?ptag=v.qq.com%23v.play.adaptor%232&vid=v0032ebahef',
+                url: 'https://m.v.qq.com/',
                 freeUrl: [],
                 selectedUrl: 'http://www.82190555.com/index/qqvod.php?url=',
                 value: '',
             };
         },
         methods: {
-            pick () {
+            pick() {
                 picker.pick({
-                    items: ['Apple', 'Banana', 'Orange']
+                    items: this.channel,
+                    index: 0,
                 }, event => {
                     if (event.result === 'success') {
                         this.value = event.data
@@ -36,16 +42,27 @@
                 console.log(webview);
                 this.url = `${this.selectedUrl}${this.url}`;
                 webview.reload(this.$refs.webview);
-                console.log('newUrl=======================',this.url);
+                console.log('newUrl=======================', this.url);
             },
             handlePageStart(e) {
-                const { url } = e;
+                const {url} = e;
                 console.log('url=============================', url);
                 this.url = url;
             },
-            handleError (e) {
-                console.log('error=============================',e);
+            handleError(e) {
+                console.log('error=============================', e);
             }
+        },
+        created() {
+            source.getAllList().then(({data}) => {
+                console.log(data);
+                const { platformlist, list } = data;
+                const newPlatformList = [];
+                platformlist.forEach((item) => {
+                    newPlatformList.push(item.name);
+                });
+                this.channel = newPlatformList;
+            })
         }
     }
 </script>
